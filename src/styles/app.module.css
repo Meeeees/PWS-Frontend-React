@@ -1,0 +1,13 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.subDivision {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
