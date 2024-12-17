@@ -50,3 +50,51 @@
     justify-content: center;
     align-items: center;
 }
+
+.frame {
+    cursor: pointer;
+}
+
+.frame:hover {
+    transform: scale(1.1);
+}
+
+.persoon {
+    cursor: pointer;
+}
+
+.personen {
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+}
+
+.personen li ul {
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.personen>li>div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.personen>li>div>div {
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+}
+
+.MensenMain {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    width: 100vw;
+    padding: 20px;
+    gap: 10px;
+}
