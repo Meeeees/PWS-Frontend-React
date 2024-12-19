@@ -10,7 +10,6 @@ const styleRemove = {
     transform: 'translate(-50%, -50%)',
     width: 400,
     bgcolor: 'background.paper',
-    border: '2px solid #F00',
     boxShadow: 24,
     p: 4,
 };
@@ -20,12 +19,11 @@ const styleAdd = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     bgcolor: 'background.paper',
-    border: '2px solid #F00',
     boxShadow: 24,
     p: 4,
 };
 
-const AddPeople = () => {
+const AddPeople = ({ queryString }) => {
     const [name, setName] = useState("");
     const [Status, setStatus] = useState(null);
     const [voltooid, setVoltooid] = useState(false);
@@ -39,12 +37,11 @@ const AddPeople = () => {
 
     const [geselecteerdPersoon, setGeselecteerdPersoon] = useState(null);
     useEffect(() => {
-        fetch(config.Backend + "/info?type=2").then(async res => {
+        fetch(config.Backend + "/info" + queryString + "&type=2").then(async res => {
             res = await res.json()
             setMensen(res)
         })
     }, [])
-
 
     return (
         <div className={styles.MensenMain}>
@@ -76,7 +73,7 @@ const AddPeople = () => {
                                         {mensen[key][0].map((frame) => {
                                             return (
                                                 <li className={styles.frame} id={frame} key={frame} onClick={() => {
-                                                    fetch(config.Backend + "/verwijder?naam=" + key + "&frame=" + frame).then(async res => {
+                                                    fetch(config.Backend + "/verwijder" + queryString + "&naam=" + key + "&frame=" + frame).then(async res => {
                                                         document.getElementById(frame).remove();
                                                     })
                                                 }}>
@@ -89,6 +86,14 @@ const AddPeople = () => {
                             </li>
                         )
                     })}
+                    <li>
+                        <Button variant="outlined" onClick={() => {
+                            setAddPicturesModal(true)
+                            setName("")
+                            setNieuwPersoon(true)
+                        }}>
+                            Voeg nieuw persoon toe</Button>
+                    </li>
                 </ul>
                 <div>
 
@@ -106,8 +111,8 @@ const AddPeople = () => {
                     <p>Weet je zeker dat je deze persoon wilt verwijderen?
                         dit kan niet ongedaan gemaakt worden</p>
                     <Button color='error' variant="outlined" onClick={() => {
-                        fetch(config.Backend + "/verwijder?naam=" + geselecteerdPersoon).then(() => {
-                            fetch(config.Backend + "/info?type=2").then(async res => {
+                        fetch(config.Backend + "/verwijder" + queryString + "&naam=" + geselecteerdPersoon).then(() => {
+                            fetch(config.Backend + "/info" + queryString + "&type=2").then(async res => {
                                 res = await res.json()
                                 setMensen(res)
                             })
@@ -125,14 +130,14 @@ const AddPeople = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={styleAdd}>
-                    <img className={styles.video} src={`${config.Backend}/video`} alt="live feed" />
+                    <img className={styles.video} src={`${config.Backend}/video` + queryString} alt="live feed" />
                     {nieuwPersoon && (
                         <TextField id="outlined-basic" label="Naam" variant="outlined" onChange={(e) => setName(e.target.value)} />
                     )}
                     <div>
                         <Button variant="outlined" onClick={() => {
                             setGestart(true)
-                            fetch(config.Backend + "/start?name=" + geselecteerdPersoon).then(async res => {
+                            fetch(config.Backend + "/start" + queryString + "&name=" + name).then(async res => {
                                 res = await res.json()
                                 if (res.status === 400) {
                                     setStatus("De naam mag niet leeg zijn")
@@ -141,7 +146,7 @@ const AddPeople = () => {
                                 } else {
                                     setVoltooid(true);
                                     setGestart(false);
-                                    fetch(config.Backend + "/info?type=2").then(async res => {
+                                    fetch(config.Backend + "/info" + queryString + "&type=2").then(async res => {
                                         res = await res.json()
                                         setMensen(res)
                                     })
